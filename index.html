@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>VALO AIM · 无畏契约瞄准训练器</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080c11; --panel:#0f1820; --line:rgba(255,255,255,.075); --line2:rgba(255,255,255,.14);
+  --txt:#e9eff5; --dim:#8296a8; --dim2:#5c7083;
+  --red:#ff4655; --teal:#2ee6c5; --gold:#ffd166;
+}
+html,body{height:100%}
+body{
+  background:var(--bg);color:var(--txt);overflow:hidden;
+  font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;
+}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input,select{font-family:inherit}
+.hidden{display:none!important}
+
+/* ============ 主界面 ============ */
+#screen-home{
+  position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(255,70,85,.13), transparent 60%),
+    radial-gradient(900px 500px at 85% 110%, rgba(46,230,197,.07), transparent 60%),
+    var(--bg);
+}
+#screen-home::-webkit-scrollbar{width:10px}
+#screen-home::-webkit-scrollbar-thumb{background:#1d2b37;border-radius:9px}
+.wrap{max-width:1120px;margin:0 auto;padding:46px 28px 64px}
+
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:34px}
+.logo{
+  width:38px;height:38px;border-radius:9px;display:grid;place-items:center;
+  background:linear-gradient(140deg,#ff4655,#a11423);
+  box-shadow:0 0 26px rgba(255,70,85,.45), inset 0 1px 0 rgba(255,255,255,.25);
+  font-weight:800;font-size:17px;letter-spacing:-1px;color:#fff;
+}
+.brand-txt b{font-size:15px;letter-spacing:.18em;font-weight:700;display:block;line-height:1.2}
+.brand-txt span{font-size:11px;color:var(--dim2);letter-spacing:.22em}
+
+.hero{margin-bottom:38px}
+.hero h1{
+  font-size:clamp(30px,4.1vw,46px);line-height:1.14;letter-spacing:-.02em;font-weight:800;
+  background:linear-gradient(100deg,#fff 20%,#ffb3bb 55%,#ff4655 92%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:14px;
+}
+.hero p{color:var(--dim);font-size:14.5px;line-height:1.85;max-width:680px}
+.hero p b{color:#cfe0ee;font-weight:600}
+
+.summary{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  margin-top:26px;max-width:760px;
+}
+.sum-item{background:linear-gradient(180deg,#101a23,#0c141b);padding:15px 18px}
+.sum-item span{display:block;font-size:11px;color:var(--dim2);letter-spacing:.13em;margin-bottom:6px}
+.sum-item b{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.sum-item b i{font-size:11px;font-style:normal;color:var(--dim);font-weight:500;margin-left:3px;letter-spacing:0}
+.sum-item.hl b{color:var(--teal)}
+
+.sec-title{display:flex;align-items:center;gap:12px;margin:42px 0 18px;font-size:12px;letter-spacing:.2em;color:var(--dim2);font-weight:600}
+.sec-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:14px}
+.mode{
+  position:relative;text-align:left;background:linear-gradient(165deg,#111c25,#0b1319);
+  border:1px solid var(--line);border-radius:15px;padding:20px 18px 17px;overflow:hidden;
+  transition:transform .18s cubic-bezier(.2,.8,.3,1),border-color .18s,box-shadow .18s;
+}
+.mode::before{
+  content:"";position:absolute;inset:0;opacity:0;transition:opacity .2s;pointer-events:none;
+  background:radial-gradient(320px 130px at 20% 0%,rgba(255,70,85,.14),transparent 70%);
+}
+.mode:hover{transform:translateY(-3px);border-color:rgba(255,70,85,.42);box-shadow:0 14px 34px -12px rgba(255,70,85,.4)}
+.mode:hover::before{opacity:1}
+.mode-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.mode-ico{
+  width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:19px;
+  background:rgba(255,70,85,.1);border:1px solid rgba(255,70,85,.24);color:#ff8b95;
+}
+.mode-best{font-size:10.5px;color:var(--dim2);letter-spacing:.06em;text-align:right;line-height:1.5}
+.mode-best b{display:block;color:var(--gold);font-size:14px;font-variant-numeric:tabular-nums;letter-spacing:0}
+.mode h3{font-size:16.5px;font-weight:700;margin-bottom:3px}
+.mode .en{font-size:10.5px;color:var(--dim2);letter-spacing:.16em;text-transform:uppercase;margin-bottom:11px}
+.mode p{font-size:12.5px;color:var(--dim);line-height:1.65}
+.mode .meta{margin-top:13px;padding-top:11px;border-top:1px solid rgba(255,255,255,.05);display:flex;gap:14px}
+.mode .meta i{font-style:normal;font-size:10.5px;color:var(--dim2);letter-spacing:.05em}
+
+.acts{display:flex;flex-wrap:wrap;gap:11px;margin-top:34px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:10px;font-size:13px;
+  background:#141f29;border:1px solid var(--line2);color:#c8d8e5;font-weight:600;transition:all .16s;
+}
+.btn:hover{background:#1a2833;border-color:rgba(255,255,255,.26);color:#fff}
+.btn.primary{
+  background:linear-gradient(135deg,#ff4655,#d92b3c);border-color:#ff6b78;color:#fff;
+  box-shadow:0 8px 22px -8px rgba(255,70,85,.75);
+}
+.btn.primary:hover{filter:brightness(1.09);box-shadow:0 10px 28px -8px rgba(255,70,85,.9)}
+.btn.ghost{background:transparent}
+.btn.lg{padding:14px 30px;font-size:14.5px}
+.foot{margin-top:44px;font-size:11px;color:#3d4d5b;line-height:1.9}
+
+/* ============ 训练场景 ============ */
+#screen-play{position:fixed;inset:0;background:#05080b;cursor:none}
+#cv{display:block;width:100%;height:100%}
+.hud{position:absolute;inset:0;pointer-events:none}
+.hud-top{
+  position:absolute;top:0;left:0;right:0;padding:18px 26px;display:flex;align-items:center;gap:26px;
+  background:linear-gradient(180deg,rgba(0,0,0,.62),transparent);
+}
+.hud-mode{font-size:12.5px;letter-spacing:.2em;color:#9fb3c4;font-weight:600;white-space:nowrap}
+.hud-mode i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);margin-right:8px;vertical-align:1px}
+.hud-timer{flex:1;display:flex;align-items:center;gap:12px;max-width:520px;margin:0 auto}
+.bar{flex:1;height:4px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#2ee6c5,#59f5d8);border-radius:3px;transition:width .12s linear}
+.bar.low i{background:linear-gradient(90deg,#ff4655,#ff8b57)}
+#timeTxt{font-size:15px;font-variant-numeric:tabular-nums;color:#dfeaf3;min-width:38px;text-align:right;font-weight:600}
+.hud-stats{display:flex;gap:22px}
+.stat{text-align:right;min-width:52px}
+.stat b{display:block;font-size:18px;font-variant-numeric:tabular-nums;font-weight:700;line-height:1.15}
+.stat span{font-size:9.5px;color:#6c8194;letter-spacing:.14em}
+#hudScore{color:#fff}
+#hudAcc{color:var(--teal)}
+#hudCombo{color:var(--gold)}
+.hud-bottom{position:absolute;bottom:20px;left:0;right:0;text-align:center;font-size:11px;color:rgba(255,255,255,.26);letter-spacing:.16em}
+
+.ovl{
+  position:absolute;inset:0;display:grid;place-items:center;z-index:20;cursor:default;
+  background:rgba(4,7,10,.82);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+}
+.ovl-card{
+  background:linear-gradient(170deg,#111c25,#0a1117);border:1px solid var(--line2);
+  border-radius:18px;padding:34px 40px;text-align:center;max-width:520px;
+  box-shadow:0 30px 80px -20px #000;animation:pop .28s cubic-bezier(.2,.9,.3,1.2);
+}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+.ovl-card h2{font-size:24px;font-weight:800;margin-bottom:10px}
+.ovl-card p{font-size:13px;color:var(--dim);line-height:1.8;margin-bottom:22px}
+.ovl-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+#countLayer{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:15}
+#countNum{
+  font-size:110px;font-weight:800;color:#fff;letter-spacing:-.04em;
+  text-shadow:0 0 60px rgba(255,70,85,.85),0 0 140px rgba(255,70,85,.5);
+  animation:countPulse .42s ease-out;
+}
+@keyframes countPulse{from{transform:scale(1.55);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* ============ 结果 ============ */
+#resultLayer{
+  position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:24px;overflow-y:auto;
+  background:radial-gradient(900px 500px at 50% 0%,rgba(255,70,85,.14),transparent 65%),rgba(4,7,10,.94);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.res{width:min(560px,100%);animation:pop .32s cubic-bezier(.2,.9,.3,1.15)}
+.res-head{text-align:center;margin-bottom:26px}
+.res-head .tag{font-size:11px;letter-spacing:.26em;color:var(--dim2);margin-bottom:10px}
+.res-head h2{font-size:26px;font-weight:800}
+.res-grade{
+  display:inline-grid;place-items:center;width:82px;height:82px;border-radius:22px;margin:16px 0 4px;
+  font-size:40px;font-weight:800;line-height:1;border:1px solid;
+}
+.res-grade.S{color:#ffd166;border-color:rgba(255,209,102,.45);background:rgba(255,209,102,.09);box-shadow:0 0 44px -6px rgba(255,209,102,.5)}
+.res-grade.A{color:#2ee6c5;border-color:rgba(46,230,197,.4);background:rgba(46,230,197,.08);box-shadow:0 0 44px -6px rgba(46,230,197,.42)}
+.res-grade.B{color:#7fb8ff;border-color:rgba(127,184,255,.38);background:rgba(127,184,255,.08)}
+.res-grade.C{color:#a4b4c2;border-color:rgba(164,180,194,.3);background:rgba(164,180,194,.06)}
+.res-grade.D{color:#ff7a85;border-color:rgba(255,122,133,.35);background:rgba(255,122,133,.07)}
+.res-score{text-align:center;margin:14px 0 4px}
+.res-score b{font-size:46px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.res-score span{display:block;font-size:10.5px;color:var(--dim2);letter-spacing:.2em;margin-top:2px}
+.res-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:22px 0}
+.res-cell{background:#0d161d;padding:14px 18px}
+.res-cell span{display:block;font-size:10.5px;color:var(--dim2);letter-spacing:.12em;margin-bottom:5px}
+.res-cell b{font-size:19px;font-variant-numeric:tabular-nums;font-weight:700}
+.res-cell b i{font-size:11px;font-style:normal;color:var(--dim);font-weight:500;margin-left:2px}
+.coach{background:#0c151b;border:1px solid var(--line);border-left:2px solid var(--red);border-radius:10px;padding:16px 18px;margin-bottom:22px}
+.coach h4{font-size:11px;letter-spacing:.18em;color:var(--red);margin-bottom:10px;font-weight:700}
+.coach li{list-style:none;font-size:12.5px;color:#b6c8d6;line-height:1.75;padding-left:14px;position:relative;margin-bottom:6px}
+.coach li:last-child{margin-bottom:0}
+.coach li::before{content:"\203A";position:absolute;left:0;color:var(--red);font-weight:700}
+
+/* ============ 弹窗 ============ */
+.modal{
+  position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;overflow-y:auto;
+  background:rgba(3,6,9,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.sheet{
+  width:min(600px,100%);background:linear-gradient(170deg,#111c25,#0a1117);
+  border:1px solid var(--line2);border-radius:18px;box-shadow:0 30px 90px -20px #000;
+  animation:pop .26s cubic-bezier(.2,.9,.3,1.15);max-height:88vh;display:flex;flex-direction:column;
+}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:22px 26px 16px;border-bottom:1px solid var(--line);flex:none}
+.sheet-head h3{font-size:17px;font-weight:700}
+.sheet-head .x{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:var(--dim);font-size:17px;transition:.15s}
+.sheet-head .x:hover{background:#1d2a35;color:#fff}
+.sheet-body{padding:8px 26px 24px;overflow-y:auto}
+.sheet-body::-webkit-scrollbar{width:8px}
+.sheet-body::-webkit-scrollbar-thumb{background:#1d2b37;border-radius:8px}
+.grp{margin-top:20px}
+.grp>h5{font-size:10.5px;letter-spacing:.2em;color:var(--dim2);margin-bottom:13px;font-weight:600}
+.row{display:flex;align-items:center;gap:14px;margin-bottom:15px}
+.row>label{flex:none;width:118px;font-size:12.5px;color:#b6c8d6}
+.row>input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:3px;background:#22323f;outline:none}
+.row>input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#ff4655;cursor:pointer;
+  box-shadow:0 0 0 3px rgba(255,70,85,.18),0 0 12px rgba(255,70,85,.7);
+}
+.row>input[type=range]::-moz-range-thumb{width:14px;height:14px;border:none;border-radius:50%;background:#ff4655;cursor:pointer}
+.row output{flex:none;width:62px;text-align:right;font-size:12.5px;font-variant-numeric:tabular-nums;color:#dfeaf3;font-weight:600}
+.row select{flex:1;background:#0e1821;border:1px solid var(--line2);color:#dfeaf3;border-radius:8px;padding:8px 10px;font-size:12.5px;outline:none}
+.seg{display:flex;gap:6px;flex:1}
+.seg button{flex:1;padding:8px 0;border-radius:8px;font-size:12px;background:#0e1821;border:1px solid var(--line);color:var(--dim);transition:.15s}
+.seg button.on{background:rgba(255,70,85,.13);border-color:rgba(255,70,85,.5);color:#ff919b;font-weight:600}
+.swatch{display:flex;gap:8px;flex:1}
+.swatch button{width:26px;height:26px;border-radius:7px;border:2px solid transparent;transition:.15s}
+.swatch button.on{border-color:#fff;transform:scale(1.12)}
+.note{font-size:11.5px;color:var(--dim2);line-height:1.75;background:#0b141a;border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin-top:6px}
+.note b{color:var(--teal);font-weight:600}
+.sheet-foot{display:flex;gap:10px;justify-content:flex-end;padding:16px 26px 22px;border-top:1px solid var(--line);flex:none}
+
+.rec-empty{text-align:center;color:var(--dim2);font-size:13px;padding:46px 0;line-height:1.9}
+.rec-mode{margin-bottom:26px}
+.rec-mode h4{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}
+.rec-mode h4 span{font-size:11px;color:var(--dim2);font-weight:500;letter-spacing:.06em}
+.chart{display:flex;align-items:flex-end;gap:5px;height:72px;padding:8px 0 0;border-bottom:1px solid var(--line)}
+.chart i{flex:1;background:linear-gradient(180deg,rgba(255,70,85,.85),rgba(255,70,85,.22));border-radius:3px 3px 0 0;min-height:3px;transition:.3s}
+.chart i.new{background:linear-gradient(180deg,#2ee6c5,#0d6d5e)}
+.rec-list{margin-top:12px}
+.rec-row{display:grid;grid-template-columns:66px 1fr 1fr 1fr 50px;gap:8px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11.5px;color:var(--dim)}
+.rec-row b{color:#dfeaf3;font-variant-numeric:tabular-nums;font-weight:600}
+.rec-row .g{text-align:center;font-weight:700}
+.g.S{color:#ffd166}.g.A{color:#2ee6c5}.g.B{color:#7fb8ff}.g.C{color:#a4b4c2}.g.D{color:#ff7a85}
+
+/* ============ 启动自检 / 错误提示 ============ */
+#bootLoader{
+  position:fixed;inset:0;z-index:900;display:grid;place-items:center;
+  background:#080c11;text-align:center;
+}
+.bl-spin{
+  width:34px;height:34px;margin:0 auto 20px;border-radius:50%;
+  border:2px solid rgba(255,70,85,.2);border-top-color:#ff4655;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+#bootLoader p{font-size:13px;color:#8296a8;line-height:1.9}
+#bootLoader .bl-hint{margin-top:14px;font-size:12px;color:#5c7083;max-width:420px}
+#bootLoader .bl-hint b{color:#ff8b95}
+#errBar{
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:999;
+  max-width:min(680px,92vw);background:#2a0f13;border:1px solid #ff4655;border-radius:10px;
+  padding:12px 18px;font-size:12.5px;line-height:1.7;color:#ffb3bb;
+  box-shadow:0 12px 40px -10px #000;white-space:pre-wrap;word-break:break-all;
+}
+#errBar b{color:#fff}
+</style>
+</head>
+<body>
+
+<!-- 启动自检遮罩：脚本正常运行时会被移除；如果它一直停着，说明脚本没能运行 -->
+<div id="bootLoader">
+  <div>
+    <div class="bl-spin"></div>
+    <p>正在加载瞄准训练器…</p>
+    <p class="bl-hint">如果这行字停留超过 3 秒，说明页面脚本没有运行。<br>
+      请用 <b>Edge</b> 或 <b>Chrome</b> 打开 index.html（不要用 IE / 兼容模式）。</p>
+  </div>
+</div>
+
+<!-- ================= 主界面 ================= -->
+<section id="screen-home">
+  <div class="wrap">
+    <div class="brand">
+      <div class="logo">V</div>
+      <div class="brand-txt"><b>VALO AIM</b><span>瞄准实验室 · AIM LAB</span></div>
+    </div>
+
+    <div class="hero">
+      <h1>练的是准星，赢的是对枪。</h1>
+      <p>这是一台按<b>无畏契约真实灵敏度</b>换算的瞄准训练器。它读取你的游戏内灵敏度、DPI 和 FOV，把物理鼠标位移 1:1 映射成视角转动角度 —— 你在浏览器里练出来的肌肉记忆，走进游戏里能直接用。</p>
+      <div class="summary">
+        <div class="sum-item"><span>eDPI</span><b id="sumEdpi">320</b></div>
+        <div class="sum-item hl"><span>360° 转身距离</span><b id="sumCm">40.8<i>cm</i></b></div>
+        <div class="sum-item"><span>水平 FOV</span><b id="sumFov">103<i>°</i></b></div>
+        <div class="sum-item"><span>单局时长</span><b id="sumDur">60<i>s</i></b></div>
+      </div>
+    </div>
+
+    <div class="sec-title">选择训练模式</div>
+    <div class="modes" id="modeGrid"></div>
+
+    <div class="acts">
+      <button class="btn primary lg" id="btnQuick">开始今日训练</button>
+      <button class="btn" id="btnSettings">灵敏度 / 准星设置</button>
+      <button class="btn ghost" id="btnHistory">训练记录</button>
+    </div>
+
+    <div class="foot">
+      建议使用 Edge / Chrome 打开，并允许「锁定鼠标指针」。<br>
+      训练器不能替代游戏内的实战对枪，但可以稳定提升精准度与反应速度。每天 15 分钟，坚持两周可见变化。<br>
+      <span style="color:#2b3a47">v1.1 · VALO AIM</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 训练场景 ================= -->
+<section id="screen-play" class="hidden">
+  <canvas id="cv"></canvas>
+
+  <div class="hud">
+    <div class="hud-top">
+      <div class="hud-mode"><i></i><span id="hudMode">网格射击</span></div>
+      <div class="hud-timer">
+        <div class="bar" id="timeBarWrap"><i id="timeBar"></i></div>
+        <span id="timeTxt">60</span>
+      </div>
+      <div class="hud-stats">
+        <div class="stat"><b id="hudScore">0</b><span>SCORE</span></div>
+        <div class="stat"><b id="hudAcc">—</b><span>ACCURACY</span></div>
+        <div class="stat"><b id="hudCombo">0</b><span>COMBO</span></div>
+      </div>
+    </div>
+    <div class="hud-bottom" id="hudHint">ESC 暂停 / 退出鼠标锁定</div>
+  </div>
+
+  <div id="startLayer" class="ovl">
+    <div class="ovl-card">
+      <h2 id="startTitle">网格射击</h2>
+      <p id="startDesc"></p>
+      <div class="ovl-acts">
+        <button class="btn primary" id="btnBegin">点击开始（锁定鼠标）</button>
+        <button class="btn" id="btnCompat" style="display:none">兼容模式试玩</button>
+        <button class="btn ghost" id="btnBackHome">返回主页</button>
+      </div>
+      <p style="margin:16px 0 0;font-size:11px;color:#5c7083" id="lockHint"></p>
+    </div>
+  </div>
+
+  <div id="countLayer" class="hidden"><span id="countNum">3</span></div>
+
+  <div id="pauseLayer" class="ovl hidden">
+    <div class="ovl-card">
+      <h2>已暂停</h2>
+      <p>鼠标已解锁。点击继续后会重新锁定指针，并从暂停处接着练。</p>
+      <p id="pauseHint" style="margin:-10px 0 18px;font-size:11.5px;color:#ff8b95"></p>
+      <div class="ovl-acts">
+        <button class="btn primary" id="btnResume">继续训练</button>
+        <button class="btn" id="btnRestart">重新开始</button>
+        <button class="btn ghost" id="btnQuit">退出</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 结算 ================= -->
+<div id="resultLayer" class="hidden">
+  <div class="res">
+    <div class="res-head">
+      <div class="tag" id="rMode">GRIDSHOT · 60S</div>
+      <h2>训练结束</h2>
+      <div class="res-grade" id="rGrade">A</div>
+      <div class="res-score"><b id="rScore">0</b><span>总得分</span></div>
+    </div>
+    <div class="res-grid">
+      <div class="res-cell"><span id="rL1">命中率</span><b id="r1">0</b></div>
+      <div class="res-cell"><span id="rL2">每分钟命中</span><b id="r2">0</b></div>
+      <div class="res-cell"><span id="rL3">平均耗时</span><b id="r3">0</b></div>
+      <div class="res-cell"><span id="rL4">最高连击</span><b id="r4">0</b></div>
+    </div>
+    <div class="coach">
+      <h4>教练点评</h4>
+      <ul id="rAdvice"></ul>
+    </div>
+    <div class="ovl-acts">
+      <button class="btn primary" id="btnAgain">再来一局</button>
+      <button class="btn" id="btnRecords">查看记录</button>
+      <button class="btn ghost" id="btnHome2">返回主页</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 设置 ================= -->
+<div id="settingsLayer" class="modal hidden">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h3>灵敏度与准星</h3>
+      <button class="x" id="btnCloseSettings">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="grp">
+        <h5>游戏内设置（决定训练是否有效）</h5>
+        <div class="row">
+          <label>无畏契约灵敏度</label>
+          <input type="range" id="sSens" min="0.05" max="2" step="0.005">
+          <output id="oSens">0.40</output>
+        </div>
+        <div class="row">
+          <label>鼠标 DPI</label>
+          <select id="sDpi">
+            <option value="400">400</option>
+            <option value="800">800</option>
+            <option value="1000">1000</option>
+            <option value="1200">1200</option>
+            <option value="1600">1600</option>
+            <option value="2000">2000</option>
+            <option value="2600">2600</option>
+            <option value="3200">3200</option>
+          </select>
+        </div>
+        <div class="row">
+          <label>水平 FOV</label>
+          <input type="range" id="sFov" min="80" max="120" step="1">
+          <output id="oFov">103°</output>
+        </div>
+        <div class="note">
+          你的 eDPI <b id="setEdpi">320</b>，360° 转身需要 <b id="setCm">40.8 cm</b>。<br>
+          这个数字和游戏里一致 —— 用的是 Valorant 官方的视角转速：灵敏度 1 时，鼠标每 1 个 count 转 0.07°。
+        </div>
+      </div>
+
+      <div class="grp">
+        <h5>训练参数</h5>
+        <div class="row">
+          <label>单局时长</label>
+          <div class="seg" id="segDur">
+            <button data-v="30">30 秒</button>
+            <button data-v="60">60 秒</button>
+            <button data-v="90">90 秒</button>
+          </div>
+        </div>
+        <div class="row">
+          <label>目标大小</label>
+          <div class="seg" id="segDiff">
+            <button data-v="1.25">大</button>
+            <button data-v="1">中</button>
+            <button data-v="0.78">小</button>
+          </div>
+        </div>
+        <div class="row">
+          <label>灵敏度校准</label>
+          <input type="range" id="sMult" min="0.6" max="1.6" step="0.01">
+          <output id="oMult">×1.00</output>
+        </div>
+        <div class="note">
+          浏览器拿到的鼠标位移和游戏内计数可能有细微差异。如果训练时感觉<b>比游戏里更灵敏</b>，把校准调小；感觉<b>更迟钝</b>就调大。默认 ×1.00。
+        </div>
+      </div>
+
+      <div class="grp">
+        <h5>准星</h5>
+        <div class="row">
+          <label>颜色</label>
+          <div class="swatch" id="swColor">
+            <button data-c="#00ff9d" style="background:#00ff9d"></button>
+            <button data-c="#2ee6c5" style="background:#2ee6c5"></button>
+            <button data-c="#ffffff" style="background:#ffffff"></button>
+            <button data-c="#ff4655" style="background:#ff4655"></button>
+            <button data-c="#ffd166" style="background:#ffd166"></button>
+            <button data-c="#7fb8ff" style="background:#7fb8ff"></button>
+          </div>
+        </div>
+        <div class="row">
+          <label>长度</label>
+          <input type="range" id="sSize" min="2" max="26" step="1">
+          <output id="oSize">10</output>
+        </div>
+        <div class="row">
+          <label>间隙</label>
+          <input type="range" id="sGap" min="0" max="16" step="1">
+          <output id="oGap">4</output>
+        </div>
+        <div class="row">
+          <label>粗细</label>
+          <input type="range" id="sThick" min="1" max="5" step="1">
+          <output id="oThick">2</output>
+        </div>
+        <div class="row">
+          <label>中心点</label>
+          <div class="seg" id="segDot">
+            <button data-v="1">开</button>
+            <button data-v="0">关</button>
+          </div>
+        </div>
+        <div class="row">
+          <label>音效</label>
+          <div class="seg" id="segSound">
+            <button data-v="1">开</button>
+            <button data-v="0">关</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn ghost" id="btnResetCfg">恢复默认</button>
+      <button class="btn primary" id="btnCloseSettings2">完成</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 记录 ================= -->
+<div id="historyLayer" class="modal hidden">
+  <div class="sheet">
+    <div class="sheet-head">
+      <h3>训练记录</h3>
+      <button class="x" id="btnCloseHistory">✕</button>
+    </div>
+    <div class="sheet-body" id="histBody"></div>
+    <div class="sheet-foot">
+      <button class="btn ghost" id="btnClearHistory">清空记录</button>
+      <button class="btn primary" id="btnCloseHistory2">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+// —— 全局错误捕获：任何异常都直接显示在页面上，避免"点了没反应"的静默失败 ——
+function showErr(msg) {
+  try {
+    let b = document.getElementById('errBar');
+    if (!b) { b = document.createElement('div'); b.id = 'errBar'; document.body.appendChild(b); }
+    b.textContent = '⚠ ' + msg + '\n把这一行截图发给开发者即可定位问题';
+  } catch (e) { /* 连报错面板都建不出来就算了 */ }
+}
+window.addEventListener('error', function (e) {
+  showErr('脚本错误：' + (e.message || e.type) + (e.lineno ? '（第 ' + e.lineno + ' 行）' : ''));
+});
+window.addEventListener('unhandledrejection', function (e) {
+  const r = e.reason;
+  showErr('运行异常：' + ((r && (r.message || r)) || '未知错误'));
+});
+
+/* =========================================================
+   0. 工具
+   ========================================================= */
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.prototype.slice.call((r || document).querySelectorAll(s));
+const RAD = Math.PI / 180;
+const DEG = 180 / Math.PI;
+const clamp = (v, a, b) => v < a ? a : (v > b ? b : v);
+const rand = (a, b) => a + Math.random() * (b - a);
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; const t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+function dot3(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+function norm3(v) { const l = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / l, v[1] / l, v[2] / l]; }
+
+/* =========================================================
+   1. 配置
+   ========================================================= */
+const DEFAULTS = {
+  sens: 0.4, dpi: 800, fov: 103, duration: 60, mult: 1.0, diff: 1.0, sound: true,
+  cross: { color: '#2ee6c5', size: 10, gap: 4, thick: 2, dot: true }
+};
+// Valorant：灵敏度为 1 时，鼠标每移动 1 count 转动 0.07°
+const VALO_DEG_PER_COUNT = 0.07;
+
+let cfg = (function () {
+  let raw = {};
+  try { raw = JSON.parse(localStorage.getItem('valoaim_cfg') || '{}') || {}; } catch (e) { raw = {}; }
+  const c = Object.assign({}, DEFAULTS, raw);
+  c.cross = Object.assign({}, DEFAULTS.cross, raw.cross || {});
+  return c;
+})();
+function saveCfg() { try { localStorage.setItem('valoaim_cfg', JSON.stringify(cfg)); } catch (e) {} }
+function cm360() { return 360 / (VALO_DEG_PER_COUNT * cfg.sens * cfg.dpi) * 2.54; }
+
+/* =========================================================
+   2. 模式
+   ========================================================= */
+const MODES = {
+  gridshot: {
+    name: '网格射击', en: 'GRIDSHOT', icon: '▦',
+    desc: '场上同时存在 3 个目标，打掉一个立刻补位。练的是静态精准度与清靶效率。',
+    meta: ['3 个目标', '静态', '基础功'],
+    tip: '用准星瞄准红色球体并点击。<br>目标被打掉后会立刻在其他位置补位。'
+  },
+  flick: {
+    name: '甩枪', en: 'FLICK', icon: '⟿',
+    desc: '目标出现在任意角度，命中后立刻跳到新位置。练的是快速定位与停枪。',
+    meta: ['单目标', '大角度', '停枪'],
+    tip: '目标会出现在视野任意位置。<br>先把准星甩过去停住，再点击。'
+  },
+  tracking: {
+    name: '跟枪', en: 'TRACKING', icon: '≈',
+    desc: '目标持续移动，按住左键跟随。练的是平滑跟枪与鼠标控制。',
+    meta: ['按住射击', '移动目标', '平滑'],
+    tip: '按住鼠标左键，让准星持续压在球体上。<br>松开左键就会停止计分。'
+  },
+  micro: {
+    name: '微调', en: 'MICRO', icon: '◉',
+    desc: '目标很小、离准星很近，需要精细修正。练的是低灵敏度下的手感。',
+    meta: ['小目标', '近距离', '精细'],
+    tip: '目标很小，就在准星附近。<br>用指尖微调，不要整条手臂甩。'
+  },
+  reaction: {
+    name: '反应', en: 'REACTION', icon: '⚡',
+    desc: '目标随机延迟后突然出现，先命中得分最高。练的是反应速度与首次落点。',
+    meta: ['随机延迟', '单目标', '速度'],
+    tip: '目标会在随机延迟后突然出现。<br>越快命中，得分越高。'
+  }
+};
+const MODE_ORDER = ['gridshot', 'flick', 'tracking', 'micro', 'reaction'];
+const GRADE_BASE = {
+  gridshot: [3000, 6000, 9500, 13000],
+  flick:    [2200, 4000, 5800, 7800],
+  tracking: [1100, 1800, 2600, 3200],
+  micro:    [1800, 3100, 4500, 6000],
+  reaction: [5000, 8000, 11000, 14000]
+};
+
+/* =========================================================
+   3. 画布 / 相机
+   ========================================================= */
+const cv = $('#cv');
+const ctx = cv.getContext('2d', { alpha: false });
+let W = 0, H = 0, DPR = 1, CX = 0, CY = 0, FOCAL = 500, bgGrad = null, vgGrad = null;
+
+function camBasis(yawDeg, pitchDeg) {
+  const cy = Math.cos(yawDeg * RAD), sy = Math.sin(yawDeg * RAD);
+  const cp = Math.cos(pitchDeg * RAD), sp = Math.sin(pitchDeg * RAD);
+  // R = Ry(yaw) · Rx(pitch) 的三列：右、上、前
+  return {
+    r: [cy, 0, -sy],
+    u: [-sy * sp, cp, -cy * sp],
+    f: [sy * cp, sp, cy * cp]
+  };
+}
+function worldDir(az, el) {
+  const a = az * RAD, e = el * RAD;
+  return [Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e)];
+}
+function projectDir(d, b) {
+  const z = b.f[0] * d[0] + b.f[1] * d[1] + b.f[2] * d[2];
+  if (z <= 0.06) return null;
+  const x = b.r[0] * d[0] + b.r[1] * d[1] + b.r[2] * d[2];
+  const y = b.u[0] * d[0] + b.u[1] * d[1] + b.u[2] * d[2];
+  return [CX + FOCAL * x / z, CY - FOCAL * y / z, z];
+}
+
+function resize() {
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  W = cv.clientWidth || window.innerWidth;
+  H = cv.clientHeight || window.innerHeight;
+  cv.width = Math.max(1, Math.round(W * DPR));
+  cv.height = Math.max(1, Math.round(H * DPR));
+  CX = W / 2; CY = H / 2;
+  updateFocal();
+  bgGrad = ctx.createRadialGradient(CX, CY * 0.82, 0, CX, CY, Math.max(W, H) * 0.82);
+  bgGrad.addColorStop(0, '#16252f');
+  bgGrad.addColorStop(0.45, '#0c151c');
+  bgGrad.addColorStop(1, '#05080b');
+  vgGrad = ctx.createRadialGradient(CX, CY, Math.min(W, H) * 0.3, CX, CY, Math.max(W, H) * 0.78);
+  vgGrad.addColorStop(0, 'rgba(0,0,0,0)');
+  vgGrad.addColorStop(1, 'rgba(0,0,0,.58)');
+  buildStars();
+}
+function updateFocal() {
+  const aspect = W / H;
+  const fovX = cfg.fov * RAD;
+  const fovY = 2 * Math.atan(Math.tan(fovX / 2) / aspect);
+  FOCAL = (H / 2) / Math.tan(fovY / 2);
+}
+
+/* =========================================================
+   4. 状态
+   ========================================================= */
+const G = {
+  phase: 'idle', mode: 'gridshot',
+  yaw: 0, pitch: 0, basis: camBasis(0, 0),
+  timeLeft: 0, elapsed: 0, countdown: 0,
+  score: 0, shots: 0, hits: 0, combo: 0, maxCombo: 0,
+  hitTimes: [], reactions: [],
+  trackMs: 0, trackAcc: 0, trackCur: 0, trackMax: 0, trackBreaks: 0, onTarget: false,
+  mouseDown: false,
+  targets: [], parts: [], stars: [],
+  last: 0, missFlash: 0, hitFlash: 0,
+  locked: false, resuming: false, freeAim: false
+};
+
+/* =========================================================
+   5. 音效
+   ========================================================= */
+let AC = null;
+function audioCtx() {
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { AC = null; } }
+  if (AC && AC.state === 'suspended') { try { AC.resume(); } catch (e) {} }
+  return AC;
+}
+function beep(freq, dur, type, vol) {
+  if (!cfg.sound) return;
+  const ac = audioCtx(); if (!ac) return;
+  try {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = type || 'triangle';
+    o.frequency.setValueAtTime(freq, ac.currentTime);
+    g.gain.setValueAtTime(0.0001, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(vol || 0.05, ac.currentTime + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + dur);
+    o.connect(g); g.connect(ac.destination);
+    o.start(); o.stop(ac.currentTime + dur + 0.02);
+  } catch (e) {}
+}
+const sfx = {
+  hit: n => beep(620 + Math.min(n, 24) * 26, 0.07, 'triangle', 0.055),
+  miss: () => beep(120, 0.06, 'sine', 0.028),
+  start: () => { beep(520, 0.1, 'sine', 0.05); setTimeout(() => beep(780, 0.16, 'sine', 0.05), 110); },
+  tick: () => beep(440, 0.05, 'square', 0.025),
+  end: () => { beep(680, 0.12, 'sine', 0.05); setTimeout(() => beep(520, 0.12, 'sine', 0.05), 130); setTimeout(() => beep(390, 0.26, 'sine', 0.05), 260); }
+};
+
+/* =========================================================
+   6. 目标
+   ========================================================= */
+const GRID_PTS = [];
+for (const az of [-22, 0, 22]) for (const el of [-11, 0, 11]) GRID_PTS.push([az, el]);
+
+function baseAngles(mode) {
+  switch (mode) {
+    case 'gridshot': return 3.4;
+    case 'flick': return 2.1;
+    case 'tracking': return 1.9;
+    case 'micro': return 0.95;
+    case 'reaction': return 2.2;
+    default: return 2.5;
+  }
+}
+function newTarget(dir, ang) {
+  return {
+    dir: dir, ang: ang, alive: true, active: true, born: performance.now(),
+    rebornAt: 0, nextAt: 0,
+    az0: 0, el0: 0, ampAz: 0, ampEl: 0, w1: 1, w2: 1, p1: 0, p2: 0
+  };
+}
+// 在当前视角附近随机取方向，minD 为离准星的最小角度
+function relDirPick(rAz, rEl, minD) {
+  const md = (minD === undefined) ? 7 : minD;
+  let dAz = 0, dEl = 0, tries = 0;
+  do { dAz = rand(-rAz, rAz); dEl = rand(-rEl, rEl); tries++; }
+  while (Math.hypot(dAz, dEl) < md && tries < 24);
+  const b = camBasis(G.yaw, G.pitch);
+  const ca = Math.cos(dAz * RAD), sa = Math.sin(dAz * RAD);
+  const ce = Math.cos(dEl * RAD), se = Math.sin(dEl * RAD);
+  return norm3([
+    b.f[0] * ca * ce + b.r[0] * sa * ce + b.u[0] * se,
+    b.f[1] * ca * ce + b.r[1] * sa * ce + b.u[1] * se,
+    b.f[2] * ca * ce + b.r[2] * sa * ce + b.u[2] * se
+  ]);
+}
+function randGridDir() {
+  const p = GRID_PTS[(Math.random() * GRID_PTS.length) | 0];
+  return worldDir(p[0] + rand(-1.5, 1.5), p[1] + rand(-1.5, 1.5));
+}
+
+function spawnSet() {
+  const m = G.mode, now = performance.now();
+  const a = baseAngles(m) * cfg.diff;
+  G.targets = [];
+  if (m === 'gridshot') {
+    const pts = shuffle(GRID_PTS.slice()).slice(0, 3);
+    for (const p of pts) G.targets.push(newTarget(worldDir(p[0] + rand(-1.5, 1.5), p[1] + rand(-1.5, 1.5)), a));
+  } else if (m === 'flick') {
+    G.targets.push(newTarget(relDirPick(46, 26), a));
+  } else if (m === 'micro') {
+    G.targets.push(newTarget(relDirPick(9, 6, 4), a));
+  } else if (m === 'reaction') {
+    const t = newTarget(relDirPick(30, 18), a);
+    t.active = false;
+    t.born = 0;
+    t.nextAt = now + rand(600, 1600);
+    G.targets.push(t);
+  } else if (m === 'tracking') {
+    const t = newTarget(worldDir(G.yaw, G.pitch), a);
+    t.az0 = G.yaw; t.el0 = G.pitch;
+    t.ampAz = rand(9, 16); t.ampEl = rand(3, 7);
+    t.w1 = rand(0.7, 1.5); t.w2 = rand(0.9, 1.8);
+    t.p1 = rand(0, 6.28); t.p2 = rand(0, 6.28);
+    G.targets.push(t);
+  }
+}
+
+function relocate(t) {
+  const m = G.mode;
+  t.alive = true; t.active = true; t.born = performance.now(); t.rebornAt = 0;
+  t.ang = baseAngles(m) * cfg.diff;
+  if (m === 'gridshot') {
+    let best = randGridDir(), bestD = -1;
+    for (let i = 0; i < 12; i++) {
+      const d = randGridDir();
+      let minD = 999;
+      for (const o of G.targets) {
+        if (o === t || !o.alive) continue;
+        minD = Math.min(minD, Math.acos(clamp(dot3(o.dir, d), -1, 1)) * DEG);
+      }
+      if (minD > bestD) { bestD = minD; best = d; }
+    }
+    t.dir = best;
+  } else if (m === 'micro') {
+    t.dir = relDirPick(9, 6, 4);
+  } else if (m === 'flick') {
+    t.dir = relDirPick(46, 26);
+  } else if (m === 'reaction') {
+    t.dir = relDirPick(30, 18);
+  }
+}
+
+/* =========================================================
+   7. 特效
+   ========================================================= */
+const PCOL = ['#ff4655', '#ff8b95', '#ffd166', '#ffffff'];
+function burst(x, y, n) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2, sp = rand(60, 340);
+    G.parts.push({
+      x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+      life: 1, dec: rand(1.6, 3.4), size: rand(1.2, 3.2),
+      c: PCOL[(Math.random() * PCOL.length) | 0]
+    });
+  }
+  if (G.parts.length > 320) G.parts.splice(0, G.parts.length - 320);
+}
+function stepParticles(dt) {
+  for (let i = G.parts.length - 1; i >= 0; i--) {
+    const p = G.parts[i];
+    if (p.life <= 0) { G.parts.splice(i, 1); continue; }
+    p.x += p.vx * dt; p.y += p.vy * dt;
+    p.vx *= 0.94; p.vy = p.vy * 0.94 + 260 * dt;
+    p.life -= dt * p.dec;
+  }
+}
+function buildStars() {
+  G.stars = [];
+  for (let i = 0; i < 240; i++) {
+    const u = rand(-0.85, 0.95), th = rand(0, Math.PI * 2);
+    const s = Math.sqrt(Math.max(0, 1 - u * u));
+    G.stars.push({ d: norm3([s * Math.cos(th), u, s * Math.sin(th)]), a: rand(0.06, 0.42), r: rand(0.4, 1.5) });
+  }
+}
+
+/* =========================================================
+   8. 流程
+   ========================================================= */
+const el = {
+  home: $('#screen-home'), play: $('#screen-play'),
+  startLayer: $('#startLayer'), pauseLayer: $('#pauseLayer'),
+  countLayer: $('#countLayer'), countNum: $('#countNum'),
+  hudMode: $('#hudMode'), hudScore: $('#hudScore'), hudAcc: $('#hudAcc'),
+  hudCombo: $('#hudCombo'), hudHint: $('#hudHint'),
+  timeBar: $('#timeBar'), timeBarWrap: $('#timeBarWrap'), timeTxt: $('#timeTxt'),
+  resultLayer: $('#resultLayer')
+};
+
+function showScreen(name) {
+  el.home.classList.toggle('hidden', name !== 'home');
+  el.play.classList.toggle('hidden', name !== 'play');
+}
+
+function resetSession() {
+  G.yaw = 0; G.pitch = 0; G.basis = camBasis(0, 0);
+  G.score = 0; G.shots = 0; G.hits = 0; G.combo = 0; G.maxCombo = 0;
+  G.hitTimes = []; G.reactions = [];
+  G.trackMs = 0; G.trackAcc = 0; G.trackCur = 0; G.trackMax = 0; G.trackBreaks = 0; G.onTarget = false;
+  G.mouseDown = false;
+  G.targets = []; G.parts = [];
+  G.timeLeft = cfg.duration; G.elapsed = 0;
+  G.missFlash = 0; G.hitFlash = 0;
+}
+
+function openMode(mode) {
+  G.mode = mode;
+  G.phase = 'ready';
+  G.resuming = false;
+  G.freeAim = false;
+  resetSession();
+
+  const m = MODES[mode];
+  $('#startTitle').textContent = m.name;
+  $('#startDesc').innerHTML = m.tip;
+  $('#lockHint').textContent = '';
+  $('#btnCompat').style.display = 'none';
+  el.hudMode.textContent = m.name;
+  el.hudHint.textContent = mode === 'tracking' ? '按住左键跟随 · ESC 暂停' : 'ESC 暂停 / 退出鼠标锁定';
+  el.timeTxt.textContent = cfg.duration;
+  el.timeBar.style.width = '100%';
+  el.timeBarWrap.classList.remove('low');
+  el.hudScore.textContent = '0';
+  el.hudAcc.textContent = '—';
+  el.hudCombo.textContent = '0';
+
+  showScreen('play');
+  el.startLayer.classList.remove('hidden');
+  el.pauseLayer.classList.add('hidden');
+  el.countLayer.classList.add('hidden');
+  resize();
+  render();
+}
+
+function failLock(msg) { if (msg) $('#lockHint').textContent = msg; }
+
+// 锁定失败时露出的兜底入口，保证"至少能玩"
+function showCompat() {
+  const b = $('#btnCompat');
+  if (b) b.style.display = 'inline-flex';
+}
+
+function startCompat() {
+  G.freeAim = true;
+  G.resuming = false;
+  G.phase = 'ready';
+  el.startLayer.classList.add('hidden');
+  $('#lockHint').textContent = '';
+  el.hudHint.textContent = '兼容模式：鼠标未锁定，转到屏幕边缘会停住 · ESC 暂停';
+  beginCountdown();
+}
+
+// 查询浏览器是否已禁止「指针锁定」权限（Chrome 131+ 需要授权）
+function checkPointerPermission(thenHint) {
+  try {
+    if (!navigator.permissions || !navigator.permissions.query) return;
+    navigator.permissions.query({ name: 'pointer-lock' }).then(function (st) {
+      if (st.state === 'denied') {
+        const m = '浏览器已禁止本页「锁定鼠标」。点地址栏左侧的图标 → 把「指针锁定 / 鼠标」改成「允许」→ 刷新页面。';
+        if (thenHint) failLock(m); else showErr(m + '\n也可以直接点「兼容模式试玩」。');
+      }
+    }).catch(function () {});
+  } catch (e) {}
+}
+
+function requestLock() {
+  if (!cv.requestPointerLock) {
+    failLock('你的浏览器不支持鼠标锁定。点下面的「兼容模式试玩」也能练。');
+    showCompat();
+    return;
+  }
+  let p = null;
+  try { p = cv.requestPointerLock({ unadjustedMovement: true }); }
+  catch (e) {
+    // 老浏览器不认识 options 参数，退回普通锁定
+    try { cv.requestPointerLock(); }
+    catch (e2) { onLockFail(e2); }
+    return;
+  }
+  if (p && typeof p.then === 'function') {
+    p.catch(function (err) {
+      if (err && err.name === 'NotSupportedError') {
+        // 平台不支持"原始输入"，退回普通锁定
+        try { cv.requestPointerLock(); } catch (e) {}
+      } else {
+        onLockFail(err);
+      }
+    });
+  }
+}
+
+function onLockFail(err) {
+  const name = (err && err.name) || '';
+  let msg = '鼠标锁定失败';
+  if (name === 'SecurityError' || name === 'NotAllowedError') msg = '浏览器拒绝了鼠标锁定（多半是权限被拦截）';
+  else if (name === 'NotSupportedError') msg = '当前浏览器不支持原始鼠标输入';
+  failLock(msg + '。可点下面的「兼容模式试玩」继续练。');
+  showCompat();
+  checkPointerPermission(true);
+}
+
+document.addEventListener('pointerlockchange', () => {
+  G.locked = (document.pointerLockElement === cv);
+  if (G.locked) {
+    G.freeAim = false;
+    el.startLayer.classList.add('hidden');
+    if (G.phase === 'ready') {
+      if (G.resuming) resumeNow(); else beginCountdown();
+    }
+  } else if (G.phase === 'playing' || G.phase === 'countdown') {
+    if (!G.freeAim) pauseGame();
+  }
+});
+document.addEventListener('pointerlockerror', () => {
+  if (G.resuming) {
+    // 暂停后恢复时锁定失败 → 退回暂停面板，别把玩家卡在空画面上
+    G.resuming = false;
+    G.phase = 'paused';
+    el.pauseLayer.classList.remove('hidden');
+    $('#pauseHint').textContent = '鼠标锁定失败，请再点一次「继续训练」，或退出后用兼容模式。';
+  } else if (G.phase === 'ready') {
+    failLock('鼠标锁定失败。请再点一次「开始」；若一直失败，点下面的「兼容模式试玩」。');
+    showCompat();
+  }
+});
+
+function beginCountdown() {
+  G.phase = 'countdown';
+  G.countdown = 3.0;
+  G.elapsed = 0;
+  G.timeLeft = cfg.duration;
+  spawnSet();
+  const now = performance.now();
+  for (const t of G.targets) if (t.active) t.born = now;
+  el.pauseLayer.classList.add('hidden');
+  el.countLayer.classList.remove('hidden');
+  el.countNum.textContent = '3';
+  el.countNum.style.animation = 'none';
+  void el.countNum.offsetWidth;
+  el.countNum.style.animation = 'countPulse .42s ease-out';
+  G.last = now;
+  sfx.start();
+}
+
+function beginPlaying() {
+  G.phase = 'playing';
+  G.elapsed = 0;
+  G.timeLeft = cfg.duration;
+  const now = performance.now();
+  for (const t of G.targets) {
+    if (G.mode === 'reaction' && !t.active) t.nextAt = now + rand(500, 1400);
+    else t.born = now;
+  }
+  el.countLayer.classList.add('hidden');
+  G.last = now;
+}
+
+// 从暂停恢复：不重置分数与计时，直接继续
+function resumeNow() {
+  G.resuming = false;
+  G.phase = 'playing';
+  el.pauseLayer.classList.add('hidden');
+  const now = performance.now();
+  for (const t of G.targets) {
+    if (t.active) t.born = now;
+    else t.nextAt = now + rand(400, 1000);
+  }
+  G.mouseDown = false;
+  G.last = now;
+}
+
+function pauseGame() {
+  if (G.phase !== 'playing' && G.phase !== 'countdown') return;
+  G.phase = 'paused';
+  G.mouseDown = false;
+  el.pauseLayer.classList.remove('hidden');
+}
+
+function resumeGame() {
+  // 兼容模式下没有指针锁定，直接接着打
+  if (G.freeAim) { el.pauseLayer.classList.add('hidden'); resumeNow(); return; }
+  // 先不隐藏暂停面板，等锁定成功再由 resumeNow 关闭；失败则退回暂停状态
+  G.phase = 'ready';
+  G.resuming = true;
+  $('#pauseHint').textContent = '';
+  requestLock();
+}
+
+function restartRun() {
+  resetSession();
+  G.resuming = false;
+  G.phase = 'ready';
+  $('#pauseHint').textContent = '';
+  requestLock();
+}
+
+function quitGame() {
+  G.phase = 'idle';
+  G.mouseDown = false;
+  G.freeAim = false;
+  if (document.pointerLockElement) document.exitPointerLock();
+  el.pauseLayer.classList.add('hidden');
+  el.startLayer.classList.add('hidden');
+  el.countLayer.classList.add('hidden');
+  el.resultLayer.classList.add('hidden');
+  showScreen('home');
+  renderHomeStats();
+}
+
+/* =========================================================
+   9. 射击判定
+   ========================================================= */
+function pickTarget() {
+  const b = G.basis;
+  let best = null, bestAng = 1e9;
+  for (const t of G.targets) {
+    if (!t.alive || !t.active) continue;
+    const ang = Math.acos(clamp(dot3(b.f, t.dir), -1, 1)) * DEG;
+    if (ang <= t.ang && ang < bestAng) { bestAng = ang; best = t; }
+  }
+  return best;
+}
+
+function onShoot() {
+  if (G.phase !== 'playing') return;
+  G.shots++;
+  const t = pickTarget();
+  if (!t) {
+    G.missFlash = 1;
+    sfx.miss();
+    if (G.combo > 4) G.combo = Math.floor(G.combo * 0.5); else G.combo = 0;
+    updateHud();
+    return;
+  }
+  const now = performance.now();
+  const react = now - t.born;
+  G.hits++;
+  G.combo++;
+  if (G.combo > G.maxCombo) G.maxCombo = G.combo;
+  G.hitTimes.push(react);
+  G.reactions.push(react);
+
+  const p = projectDir(t.dir, G.basis);
+  if (p) burst(p[0], p[1], G.mode === 'reaction' ? 26 : 16);
+
+  G.hitFlash = 0.55;
+  sfx.hit(G.combo);
+
+  let gain = 0;
+  if (G.mode === 'gridshot') {
+    const bonus = 1 + Math.min(1, Math.floor(G.combo / 5) * 0.1);
+    gain = Math.round(80 * bonus);
+  } else if (G.mode === 'flick') {
+    gain = Math.max(50, Math.round(300 - Math.min(250, react * 0.6)));
+  } else if (G.mode === 'micro') {
+    gain = Math.max(60, Math.round(260 - Math.min(200, react * 0.28)));
+  } else if (G.mode === 'reaction') {
+    gain = Math.max(80, Math.round(700 - Math.min(600, react * 1.1)));
+  } else {
+    gain = 100;
+  }
+  G.score += gain;
+
+  if (G.mode === 'gridshot') {
+    t.alive = false;
+    t.rebornAt = now + 180;
+  } else if (G.mode === 'reaction') {
+    t.active = false;
+    t.nextAt = now + rand(700, 1900);
+  } else {
+    relocate(t);
+  }
+  updateHud();
+}
+
+/* =========================================================
+   10. 主循环
+   ========================================================= */
+function loop(ts) {
+  requestAnimationFrame(loop);
+  const now = typeof ts === 'number' ? ts : performance.now();
+  let dt = (now - G.last) / 1000;
+  if (!isFinite(dt) || dt < 0) dt = 0;
+  dt = Math.min(dt, 0.06);
+  G.last = now;
+
+  if (el.play.classList.contains('hidden')) return;
+
+  if (G.phase === 'countdown') {
+    G.countdown -= dt;
+    const n = Math.ceil(G.countdown);
+    const txt = n >= 1 ? String(n) : 'GO';
+    if (el.countNum.textContent !== txt) {
+      el.countNum.textContent = txt;
+      el.countNum.style.animation = 'none';
+      void el.countNum.offsetWidth;
+      el.countNum.style.animation = 'countPulse .42s ease-out';
+      if (n >= 1) sfx.tick(); else sfx.start();
+    }
+    if (G.countdown <= -0.4) beginPlaying();
+  } else if (G.phase === 'playing') {
+    step(dt, now);
+  }
+  render();
+}
+
+function step(dt, now) {
+  G.elapsed += dt;
+  G.timeLeft -= dt;
+  if (G.timeLeft <= 0) { G.timeLeft = 0; endRun(); return; }
+
+  G.basis = camBasis(G.yaw, G.pitch);
+
+  // 目标更新
+  for (const t of G.targets) {
+    if (G.mode === 'tracking' && t.alive) {
+      const az = t.az0 + t.ampAz * Math.sin(t.w1 * G.elapsed + t.p1);
+      const el = t.el0 + t.ampEl * Math.sin(t.w2 * G.elapsed + t.p2);
+      t.dir = worldDir(clamp(az, -85, 85), clamp(el, -58, 58));
+    }
+    if (G.mode === 'gridshot' && !t.alive && now >= t.rebornAt) relocate(t);
+    if (G.mode === 'reaction' && !t.active && now >= t.nextAt) {
+      t.active = true;
+      t.born = now;
+      t.dir = relDirPick(30, 18);
+    }
+  }
+
+  // 跟枪
+  if (G.mode === 'tracking') {
+    const t = G.targets[0];
+    let hit = false;
+    if (t && t.alive && G.mouseDown) {
+      const ang = Math.acos(clamp(dot3(G.basis.f, t.dir), -1, 1)) * DEG;
+      hit = ang <= t.ang;
+    }
+    if (hit) {
+      if (!G.onTarget) { G.onTarget = true; }
+      G.trackMs += dt * 1000;
+      G.trackAcc += dt * 1000;
+      G.trackCur += dt;
+      if (G.trackCur > G.trackMax) G.trackMax = G.trackCur;
+      while (G.trackAcc >= 100) { G.trackAcc -= 100; G.score += 6; }
+      G.combo = Math.min(9999, G.combo + dt * 2);
+      if (Math.floor(G.combo) > G.maxCombo) G.maxCombo = Math.floor(G.combo);
+    } else {
+      if (G.onTarget) { G.onTarget = false; G.trackBreaks++; }
+      G.trackCur = 0;
+      G.combo = Math.max(0, G.combo - dt * 14);
+      if (G.mouseDown) G.missFlash = Math.max(G.missFlash, dt * 1.1);
+    }
+  }
+
+  if (G.missFlash > 0) G.missFlash = Math.max(0, G.missFlash - dt * 3.2);
+  if (G.hitFlash > 0) G.hitFlash = Math.max(0, G.hitFlash - dt * 3.6);
+
+  stepParticles(dt);
+  updateHud();
+}
+
+function updateHud() {
+  el.hudScore.textContent = G.score;
+  if (G.mode === 'tracking') {
+    const acc = G.elapsed > 0 ? Math.round(G.trackMs / (G.elapsed * 1000) * 100) : 0;
+    el.hudAcc.textContent = clamp(acc, 0, 100) + '%';
+  } else {
+    el.hudAcc.textContent = G.shots ? Math.round(G.hits / G.shots * 100) + '%' : '—';
+  }
+  el.hudCombo.textContent = G.mode === 'tracking' ? Math.floor(G.combo) : G.combo;
+  const pct = clamp(G.timeLeft / cfg.duration, 0, 1) * 100;
+  el.timeBar.style.width = pct.toFixed(1) + '%';
+  el.timeBarWrap.classList.toggle('low', pct < 25);
+  el.timeTxt.textContent = Math.ceil(G.timeLeft);
+}
+
+/* =========================================================
+   11. 渲染
+   ========================================================= */
+function render() {
+  if (el.play.classList.contains('hidden')) return;
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.fillStyle = bgGrad || '#05080b';
+  ctx.fillRect(0, 0, W, H);
+
+  const sh = G.missFlash * 6;
+  const ox = sh ? (Math.random() - 0.5) * sh : 0;
+  const oy = sh ? (Math.random() - 0.5) * sh : 0;
+  ctx.save();
+  ctx.translate(ox, oy);
+
+  G.basis = camBasis(G.yaw, G.pitch);
+  drawStars();
+  drawFloor();
+
+  const list = [];
+  for (const t of G.targets) {
+    if (!t.alive || !t.active) continue;
+    const z = dot3(G.basis.f, t.dir);
+    if (z > 0.12) list.push([z, t]);
+  }
+  list.sort((a, b) => a[0] - b[0]);
+  const now = performance.now();
+  for (const item of list) drawTarget(item[1], now);
+
+  drawParticles();
+  ctx.restore();
+  drawCrosshair();
+
+  if (G.hitFlash > 0.01) {
+    ctx.fillStyle = 'rgba(255,70,85,' + (G.hitFlash * 0.055).toFixed(3) + ')';
+    ctx.fillRect(0, 0, W, H);
+  }
+  if (G.missFlash > 0.02) {
+    ctx.fillStyle = 'rgba(0,0,0,' + (G.missFlash * 0.16).toFixed(3) + ')';
+    ctx.fillRect(0, 0, W, H);
+  }
+  ctx.fillStyle = vgGrad || 'rgba(0,0,0,0)';
+  ctx.fillRect(0, 0, W, H);
+}
+
+function drawStars() {
+  const b = G.basis;
+  ctx.globalCompositeOperation = 'lighter';
+  for (const s of G.stars) {
+    const z = dot3(b.f, s.d);
+    if (z <= 0.25) continue;
+    const x = dot3(b.r, s.d), y = dot3(b.u, s.d);
+    const sx = CX + FOCAL * x / z, sy = CY - FOCAL * y / z;
+    if (sx < -30 || sx > W + 30 || sy < -30 || sy > H + 30) continue;
+    ctx.globalAlpha = s.a * Math.min(1, z * 1.6);
+    ctx.fillStyle = '#9fd8ff';
+    ctx.fillRect(sx, sy, s.r, s.r);
+  }
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = 'source-over';
+}
+
+const FLOOR_Y = -2.6;
+function drawFloor() {
+  const b = G.basis;
+  const push = (x, z) => {
+    const x2 = b.r[0] * x + b.r[1] * FLOOR_Y + b.r[2] * z;
+    const y2 = b.u[0] * x + b.u[1] * FLOOR_Y + b.u[2] * z;
+    const z2 = b.f[0] * x + b.f[1] * FLOOR_Y + b.f[2] * z;
+    if (z2 <= 0.35) return null;
+    return [CX + FOCAL * x2 / z2, CY - FOCAL * y2 / z2];
+  };
+  ctx.beginPath();
+  let any = false;
+  const seg = (x0, z0, x1, z1) => {
+    const N = 14;
+    let prev = null;
+    for (let i = 0; i <= N; i++) {
+      const k = i / N;
+      const p = push(x0 + (x1 - x0) * k, z0 + (z1 - z0) * k);
+      if (!p) { prev = null; continue; }
+      if (prev) { ctx.moveTo(prev[0], prev[1]); ctx.lineTo(p[0], p[1]); any = true; }
+      prev = p;
+    }
+  };
+  for (let x = -36; x <= 36; x += 6) seg(x, 1, x, 70);
+  for (let z = 6; z <= 66; z += 6) seg(-36, z, 36, z);
+  if (any) {
+    ctx.strokeStyle = 'rgba(90,190,210,.085)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+  const hy = push(0, 200);
+  if (hy) {
+    const g = ctx.createLinearGradient(0, hy[1] - 40, 0, hy[1] + 40);
+    g.addColorStop(0, 'rgba(46,230,197,0)');
+    g.addColorStop(0.5, 'rgba(46,230,197,.055)');
+    g.addColorStop(1, 'rgba(46,230,197,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, hy[1] - 40, W, 80);
+  }
+}
+
+function drawTarget(t, now) {
+  const b = G.basis;
+  const z2 = dot3(b.f, t.dir);
+  if (z2 <= 0.1) return;
+  const sx = CX + FOCAL * dot3(b.r, t.dir) / z2;
+  const sy = CY - FOCAL * dot3(b.u, t.dir) / z2;
+  // 方向是单位向量：屏幕半径 = 焦距 × tan(角半径) ÷ 深度
+  let rp = FOCAL * Math.tan(t.ang * RAD) / z2;
+  if (rp < 0.8) rp = 0.8;
+
+  const age = (t.born > 0) ? Math.min(1, (now - t.born) / 110) : 1;
+  const rr = rp * (0.72 + 0.28 * age);
+
+  ctx.save();
+  ctx.globalAlpha = age;
+  ctx.shadowColor = 'rgba(255,70,85,.85)';
+  ctx.shadowBlur = Math.min(38, rp * 1.1);
+  const g = ctx.createRadialGradient(sx - rr * 0.33, sy - rr * 0.38, rr * 0.06, sx, sy, rr);
+  g.addColorStop(0, '#ffe3e6');
+  g.addColorStop(0.28, '#ff6c78');
+  g.addColorStop(0.72, '#e01f32');
+  g.addColorStop(1, '#7c0d18');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.arc(sx, sy, rr, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.shadowBlur = 0;
+  ctx.strokeStyle = 'rgba(255,255,255,.34)';
+  ctx.lineWidth = Math.max(0.8, rr * 0.055);
+  ctx.beginPath();
+  ctx.arc(sx, sy, rr * 0.94, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.fillStyle = 'rgba(255,255,255,.9)';
+  ctx.beginPath();
+  ctx.arc(sx - rr * 0.3, sy - rr * 0.34, Math.max(0.7, rr * 0.12), 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawParticles() {
+  if (!G.parts.length) return;
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  for (let i = 0; i < G.parts.length; i++) {
+    const p = G.parts[i];
+    if (p.life <= 0) continue;
+    ctx.globalAlpha = Math.max(0, p.life);
+    ctx.fillStyle = p.c;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, Math.max(0.4, p.size * p.life), 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+  ctx.globalAlpha = 1;
+}
+
+function drawCrosshair() {
+  const c = cfg.cross;
+  const x = CX, y = CY, s = c.size, gp = c.gap, th = c.thick;
+  ctx.save();
+  ctx.lineCap = 'butt';
+  ctx.strokeStyle = 'rgba(0,0,0,.55)';
+  ctx.lineWidth = th + 2;
+  ctx.beginPath();
+  ctx.moveTo(x - gp - s, y); ctx.lineTo(x - gp, y);
+  ctx.moveTo(x + gp, y); ctx.lineTo(x + gp + s, y);
+  ctx.moveTo(x, y - gp - s); ctx.lineTo(x, y - gp);
+  ctx.moveTo(x, y + gp); ctx.lineTo(x, y + gp + s);
+  ctx.stroke();
+
+  ctx.strokeStyle = c.color;
+  ctx.lineWidth = th;
+  ctx.beginPath();
+  ctx.moveTo(x - gp - s, y); ctx.lineTo(x - gp, y);
+  ctx.moveTo(x + gp, y); ctx.lineTo(x + gp + s, y);
+  ctx.moveTo(x, y - gp - s); ctx.lineTo(x, y - gp);
+  ctx.moveTo(x, y + gp); ctx.lineTo(x, y + gp + s);
+  ctx.stroke();
+
+  if (c.dot) {
+    ctx.fillStyle = c.color;
+    ctx.beginPath();
+    ctx.arc(x, y, Math.max(1, th * 0.72), 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+/* =========================================================
+   12. 结算
+   ========================================================= */
+function gradeOf(mode, score, duration) {
+  const norm = score * (60 / Math.max(1, duration));
+  const b = GRADE_BASE[mode] || GRADE_BASE.gridshot;
+  if (norm >= b[3]) return 'S';
+  if (norm >= b[2]) return 'A';
+  if (norm >= b[1]) return 'B';
+  if (norm >= b[0]) return 'C';
+  return 'D';
+}
+
+function endRun() {
+  G.phase = 'over';
+  G.mouseDown = false;
+  if (document.pointerLockElement) document.exitPointerLock();
+  el.countLayer.classList.add('hidden');
+
+  const dur = cfg.duration;
+  const acc = G.mode === 'tracking'
+    ? clamp(G.trackMs / Math.max(1, G.elapsed * 1000), 0, 1)
+    : (G.shots ? G.hits / G.shots : 0);
+  const kps = G.mode === 'tracking'
+    ? G.trackMs / 1000
+    : G.hits / Math.max(1, G.elapsed / 60);
+  const avgMs = G.reactions.length ? G.reactions.reduce((a, b) => a + b, 0) / G.reactions.length : 0;
+  const grade = gradeOf(G.mode, G.score, dur);
+
+  const set = (id, html) => { $('#' + id).innerHTML = html; };
+  const prevRecs = records.filter(h => h.mode === G.mode);
+  const prevBest = prevRecs.length ? Math.max.apply(null, prevRecs.map(r => r.score)) : 0;
+  const isBest = prevBest > 0 && G.score > prevBest;
+  $('#rMode').innerHTML = MODES[G.mode].en + ' · ' + dur + 'S' +
+    (isBest ? '<span style="color:#ffd166"> · 新纪录</span>'
+            : (prevBest > 0 ? ' · 最佳 ' + prevBest.toLocaleString('en-US') : ''));
+  $('#rGrade').textContent = grade;
+  $('#rGrade').className = 'res-grade ' + grade;
+  $('#rScore').textContent = G.score.toLocaleString('en-US');
+
+  if (G.mode === 'tracking') {
+    set('rL1', '跟枪精度'); set('r1', Math.round(acc * 100) + '<i>%</i>');
+    set('rL2', '有效跟枪'); set('r2', (G.trackMs / 1000).toFixed(1) + '<i>s</i>');
+    set('rL3', '单次最长在靶'); set('r3', G.trackMax.toFixed(1) + '<i>s</i>');
+    set('rL4', '脱靶次数'); set('r4', G.trackBreaks + '');
+  } else {
+    set('rL1', '命中率'); set('r1', Math.round(acc * 100) + '<i>%</i>');
+    set('rL2', '每分钟命中'); set('r2', Math.round(kps) + '<i>次</i>');
+    if (G.mode === 'reaction') { set('rL3', '平均反应'); }
+    else if (G.mode === 'flick') { set('rL3', '平均甩枪耗时'); }
+    else if (G.mode === 'micro') { set('rL3', '平均修正耗时'); }
+    else { set('rL3', '平均命中耗时'); }
+    set('r3', Math.round(avgMs) + '<i>ms</i>');
+    set('rL4', '最高连击'); set('r4', G.maxCombo + '');
+  }
+
+  const tips = advice(G.mode, acc, kps, avgMs, G.maxCombo);
+  $('#rAdvice').innerHTML = tips.map(s => '<li>' + s + '</li>').join('');
+
+  el.resultLayer.classList.remove('hidden');
+  sfx.end();
+
+  record(G.mode, G.score, acc, kps, avgMs, dur, grade);
+  renderHomeStats();
+}
+
+function advice(mode, acc, kps, avgMs, combo) {
+  const out = [];
+  if (mode === 'gridshot') {
+    if (acc < 0.55) out.push('命中率 ' + Math.round(acc * 100) + '%：节奏太快了。先把准星稳稳压到球心再点击，命中率稳定在 70% 以上再提速。');
+    else if (acc < 0.72) out.push('命中率还有提升空间。注意每次点击前「停」半拍，用指尖完成最后的修正。');
+    else out.push('静态精准度不错。下一步可以缩小目标，或在保持命中率的前提下降时长提速。');
+    if (combo >= 15) out.push('连击 ' + combo + '，节奏控制很好，试试把目标调小一档。');
+  } else if (mode === 'flick') {
+    if (avgMs > 620) out.push('平均甩枪耗时 ' + Math.round(avgMs) + 'ms：甩过头了。练习时先甩到位、停住，再点击，不要边甩边点。');
+    else if (avgMs < 300) out.push('甩枪速度很快（' + Math.round(avgMs) + 'ms），如果命中率也稳，可以去游戏里打 DM 检验。');
+    if (acc < 0.5) out.push('落点偏差较大：缩小手腕发力幅度，最后一段用指尖微调。');
+    if (acc >= 0.75 && avgMs <= 500) out.push('甩枪又准又快，这个模式可以毕业了，把难度换成「小」再练。');
+  } else if (mode === 'tracking') {
+    if (acc < 0.45) out.push('跟枪精度 ' + Math.round(acc * 100) + '%：目标一动就脱靶，说明是「追」而不是「带」。让准星领先目标半个身位平滑地推。');
+    else if (acc < 0.62) out.push('跟枪精度中等。鼠标移动要连续，避免一顿一顿地修正。');
+    else out.push('跟枪很稳。可以试着把灵敏度校准调低一点，训练更细的控制。');
+  } else if (mode === 'micro') {
+    if (acc < 0.5) out.push('微调命中率偏低：这类目标吃的是低灵敏度下的精细控制，用大臂定位、手指收尾。');
+    else if (acc > 0.78) out.push('微调很稳，说明鼠标控制力不错，去练甩枪会进步很快。');
+    else out.push('微调阶段多练「不动鼠标、只动手腕」的修正，减少无谓的大幅度移动。');
+  } else if (mode === 'reaction') {
+    if (avgMs > 330) out.push('平均反应 ' + Math.round(avgMs) + 'ms：略慢。训练时别死盯中心，用余光覆盖目标可能出现的区域。');
+    else if (avgMs < 215) out.push('反应 ' + Math.round(avgMs) + 'ms，非常快。注意别为了快而牺牲第一次落点的准确度。');
+    else out.push('反应速度在正常范围。想再快，就缩短「看见 → 点击」之间犹豫的时间，让动作变成条件反射。');
+  }
+  const g = ['每天的固定训练比偶尔猛练有效，15 分钟即可。', '练完去游戏里打两把 DM，把训练手感迁移到实战。', '手腕流和手臂流没有优劣，关键是找到稳定的发力方式。'];
+  out.push(g[(Math.random() * g.length) | 0]);
+  return out.slice(0, 3);
+}
+
+/* =========================================================
+   13. 记录
+   ========================================================= */
+let records = [];
+try { records = JSON.parse(localStorage.getItem('valoaim_hist') || '[]') || []; } catch (e) { records = []; }
+if (!Array.isArray(records)) records = [];
+
+function record(mode, score, acc, kps, avgMs, dur, grade) {
+  records.push({
+    t: Date.now(), mode: mode, score: score, acc: Math.round(acc * 100),
+    kps: Math.round(kps), ms: Math.round(avgMs), dur: dur, g: grade
+  });
+  if (records.length > 200) records = records.slice(-200);
+  try { localStorage.setItem('valoaim_hist', JSON.stringify(records)); } catch (e) {}
+}
+
+function renderHomeStats() {
+  $('#sumEdpi').textContent = Math.round(cfg.sens * cfg.dpi);
+  $('#sumCm').innerHTML = cm360().toFixed(1) + '<i>cm</i>';
+  $('#sumFov').innerHTML = cfg.fov + '<i>°</i>';
+  $('#sumDur').innerHTML = cfg.duration + '<i>s</i>';
+
+  const grid = $('#modeGrid');
+  grid.innerHTML = '';
+  for (const key of MODE_ORDER) {
+    const m = MODES[key];
+    const recs = records.filter(h => h.mode === key);
+    const best = recs.length ? Math.max.apply(null, recs.map(r => r.score)) : 0;
+    const b = document.createElement('button');
+    b.className = 'mode';
+    b.innerHTML =
+      '<div class="mode-top">' +
+        '<div class="mode-ico">' + m.icon + '</div>' +
+        '<div class="mode-best">BEST<b>' + (best ? best.toLocaleString('en-US') : '—') + '</b></div>' +
+      '</div>' +
+      '<h3>' + m.name + '</h3>' +
+      '<div class="en">' + m.en + '</div>' +
+      '<p>' + m.desc + '</p>' +
+      '<div class="meta">' + m.meta.map(x => '<i>' + x + '</i>').join('') + '</div>';
+    b.addEventListener('click', () => openMode(key));
+    grid.appendChild(b);
+  }
+}
+
+function renderHistory() {
+  const body = $('#histBody');
+  if (!records.length) {
+    body.innerHTML = '<div class="rec-empty">还没有训练记录。<br>完成一局训练后，成绩会自动保存在这里。</div>';
+    return;
+  }
+  let html = '';
+  for (const key of MODE_ORDER) {
+    const recs = records.filter(h => h.mode === key);
+    if (!recs.length) continue;
+    const recent = recs.slice(-12);
+    const best = Math.max.apply(null, recs.map(r => r.score));
+    const max = Math.max.apply(null, recent.map(r => r.score)) || 1;
+    html += '<div class="rec-mode"><h4>' + MODES[key].name +
+      '<span>最佳 ' + best.toLocaleString('en-US') + ' · 共 ' + recs.length + ' 局</span></h4>';
+    html += '<div class="chart">';
+    recent.forEach((r, i) => {
+      const h = Math.max(4, Math.round(r.score / max * 64));
+      html += '<i class="' + (i === recent.length - 1 ? 'new' : '') + '" style="height:' + h + 'px" title="' + r.score + ' 分"></i>';
+    });
+    html += '</div><div class="rec-list">';
+    recs.slice(-3).reverse().forEach(r => {
+      const d = new Date(r.t);
+      const ds = (d.getMonth() + 1) + '/' + d.getDate() + ' ' +
+        String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+      html += '<div class="rec-row"><span>' + ds + '</span><b>' + r.score.toLocaleString('en-US') +
+        '</b><span>' + (r.acc || 0) + '% 命中</span><span>' + (r.kps || 0) + ' 次/分</span>' +
+        '<span class="g ' + r.g + '">' + r.g + '</span></div>';
+    });
+    html += '</div></div>';
+  }
+  body.innerHTML = html;
+}
+
+/* =========================================================
+   14. 输入
+   ========================================================= */
+document.addEventListener('mousemove', e => {
+  if (!G.locked && !G.freeAim) return;
+  if (G.phase !== 'playing' && G.phase !== 'countdown') return;
+  const k = VALO_DEG_PER_COUNT * cfg.sens * cfg.mult;
+  G.yaw += (e.movementX || 0) * k;
+  G.pitch -= (e.movementY || 0) * k;
+  G.pitch = clamp(G.pitch, -89, 89);
+  if (G.yaw > 180) G.yaw -= 360;
+  if (G.yaw < -180) G.yaw += 360;
+});
+
+document.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  if (!G.locked && !G.freeAim) return;
+  if (G.phase !== 'playing') return;
+  if (G.mode === 'tracking') { G.mouseDown = true; return; }
+  onShoot();
+});
+document.addEventListener('mouseup', e => {
+  if (e.button === 0) G.mouseDown = false;
+});
+cv.addEventListener('contextmenu', e => e.preventDefault());
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && (G.phase === 'playing' || G.phase === 'countdown')) pauseGame();
+});
+
+window.addEventListener('resize', () => {
+  if (el.play.classList.contains('hidden')) return;
+  resize(); render();
+});
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && (G.phase === 'playing' || G.phase === 'countdown')) pauseGame();
+});
+
+/* =========================================================
+   15. UI
+   ========================================================= */
+function markSeg(sel, v) {
+  $$(sel + ' button').forEach(b => b.classList.toggle('on', Number(b.dataset.v) === Number(v)));
+}
+function syncSettingsUI() {
+  $('#sSens').value = cfg.sens;
+  $('#oSens').textContent = Number(cfg.sens).toFixed(3).replace(/0+$/, '').replace(/\.$/, '.0');
+  const dpiSel = $('#sDpi');
+  if (dpiSel.querySelector('option[value="' + cfg.dpi + '"]')) {
+    dpiSel.value = String(cfg.dpi);
+  } else {
+    const o = document.createElement('option');
+    o.value = String(cfg.dpi); o.textContent = String(cfg.dpi);
+    dpiSel.appendChild(o);
+    dpiSel.value = String(cfg.dpi);
+  }
+  $('#sFov').value = cfg.fov;
+  $('#oFov').textContent = cfg.fov + '°';
+  $('#sMult').value = cfg.mult;
+  $('#oMult').textContent = '×' + Number(cfg.mult).toFixed(2);
+  $('#sSize').value = cfg.cross.size; $('#oSize').textContent = cfg.cross.size;
+  $('#sGap').value = cfg.cross.gap; $('#oGap').textContent = cfg.cross.gap;
+  $('#sThick').value = cfg.cross.thick; $('#oThick').textContent = cfg.cross.thick;
+  $('#setEdpi').textContent = Math.round(cfg.sens * cfg.dpi);
+  $('#setCm').textContent = cm360().toFixed(1) + ' cm';
+  markSeg('#segDur', cfg.duration);
+  markSeg('#segDiff', cfg.diff);
+  markSeg('#segDot', cfg.cross.dot ? 1 : 0);
+  markSeg('#segSound', cfg.sound ? 1 : 0);
+  $$('#swColor button').forEach(b => b.classList.toggle('on', b.dataset.c.toLowerCase() === cfg.cross.color.toLowerCase()));
+}
+
+function bindRange(id, out, fmt, apply) {
+  const inp = $('#' + id), o = $('#' + out);
+  inp.addEventListener('input', () => {
+    const v = parseFloat(inp.value);
+    apply(v);
+    o.textContent = fmt(v);
+    saveCfg();
+    $('#setEdpi').textContent = Math.round(cfg.sens * cfg.dpi);
+    $('#setCm').textContent = cm360().toFixed(1) + ' cm';
+    updateFocal();
+    if (el.play.classList.contains('hidden')) renderHomeStats();
+  });
+}
+bindRange('sSens', 'oSens', v => v.toFixed(3).replace(/0+$/, '').replace(/\.$/, '.0'), v => { cfg.sens = v; });
+bindRange('sFov', 'oFov', v => v + '°', v => { cfg.fov = v; });
+bindRange('sMult', 'oMult', v => '×' + v.toFixed(2), v => { cfg.mult = v; });
+bindRange('sSize', 'oSize', v => String(v), v => { cfg.cross.size = v; });
+bindRange('sGap', 'oGap', v => String(v), v => { cfg.cross.gap = v; });
+bindRange('sThick', 'oThick', v => String(v), v => { cfg.cross.thick = v; });
+
+$('#sDpi').addEventListener('change', () => {
+  cfg.dpi = parseInt($('#sDpi').value, 10) || 800;
+  saveCfg(); syncSettingsUI(); renderHomeStats();
+});
+$('#segDur').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  cfg.duration = parseInt(b.dataset.v, 10);
+  markSeg('#segDur', cfg.duration); saveCfg(); renderHomeStats();
+});
+$('#segDiff').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  cfg.diff = parseFloat(b.dataset.v);
+  markSeg('#segDiff', cfg.diff); saveCfg();
+});
+$('#segDot').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  cfg.cross.dot = b.dataset.v === '1';
+  markSeg('#segDot', cfg.cross.dot ? 1 : 0); saveCfg();
+});
+$('#segSound').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  cfg.sound = b.dataset.v === '1';
+  markSeg('#segSound', cfg.sound ? 1 : 0); saveCfg();
+});
+$('#swColor').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  cfg.cross.color = b.dataset.c;
+  syncSettingsUI(); saveCfg();
+});
+
+$('#btnSettings').addEventListener('click', () => { syncSettingsUI(); $('#settingsLayer').classList.remove('hidden'); });
+$('#btnCloseSettings').addEventListener('click', () => $('#settingsLayer').classList.add('hidden'));
+$('#btnCloseSettings2').addEventListener('click', () => $('#settingsLayer').classList.add('hidden'));
+$('#btnResetCfg').addEventListener('click', () => {
+  cfg = JSON.parse(JSON.stringify(DEFAULTS));
+  saveCfg(); syncSettingsUI(); renderHomeStats();
+});
+$('#btnHistory').addEventListener('click', () => { renderHistory(); $('#historyLayer').classList.remove('hidden'); });
+$('#btnRecords').addEventListener('click', () => { renderHistory(); $('#historyLayer').classList.remove('hidden'); });
+$('#btnCloseHistory').addEventListener('click', () => $('#historyLayer').classList.add('hidden'));
+$('#btnCloseHistory2').addEventListener('click', () => $('#historyLayer').classList.add('hidden'));
+$('#btnClearHistory').addEventListener('click', () => {
+  if (!confirm('确定要清空所有训练记录吗？')) return;
+  records = [];
+  try { localStorage.removeItem('valoaim_hist'); } catch (e) {}
+  renderHistory(); renderHomeStats();
+});
+
+$('#btnBegin').addEventListener('click', () => {
+  $('#lockHint').textContent = '';
+  audioCtx();
+  requestLock();
+});
+$('#btnCompat').addEventListener('click', startCompat);
+$('#btnBackHome').addEventListener('click', quitGame);
+$('#btnResume').addEventListener('click', resumeGame);
+$('#btnRestart').addEventListener('click', restartRun);
+$('#btnQuit').addEventListener('click', quitGame);
+$('#btnAgain').addEventListener('click', () => {
+  el.resultLayer.classList.add('hidden');
+  openMode(G.mode);
+});
+$('#btnHome2').addEventListener('click', () => {
+  el.resultLayer.classList.add('hidden');
+  quitGame();
+});
+$('#btnQuick').addEventListener('click', () => {
+  let target = 'gridshot';
+  if (records.length >= 3) {
+    const stats = MODE_ORDER.map(k => {
+      const rs = records.filter(h => h.mode === k);
+      return { k: k, n: rs.length, avg: rs.length ? rs.reduce((a, r) => a + r.score, 0) / rs.length : 0 };
+    }).filter(x => x.n > 0);
+    if (stats.length) { stats.sort((a, b) => a.avg - b.avg); target = stats[0].k; }
+  }
+  openMode(target);
+});
+
+/* =========================================================
+   16. 启动
+   ========================================================= */
+renderHomeStats();
+syncSettingsUI();
+showScreen('home');
+G.last = performance.now();
+requestAnimationFrame(loop);
+// 如果浏览器已经禁用了指针锁定，进页面就说清楚，别等玩家点了才失败
+checkPointerPermission(false);
+
+// 全部初始化成功后才撤掉启动遮罩（若上面任何一步抛错，遮罩会留在页面上作为提示）
+const bl = $('#bootLoader');
+if (bl) bl.classList.add('hidden');
+
+// 调试钩子：在开发者工具里可查看/修改内部状态
+window.__VALO = { G: G, getCfg: function () { return cfg; }, gradeOf: gradeOf, records: function () { return records; } };
+
+})();
+</script>
+</body>
+</html>
